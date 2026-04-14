@@ -9,18 +9,9 @@ const PORT = process.env.PORT || 3000;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 // LOG DE INICIALIZAÇÃO PARA DEBUG NA RENDER
-console.log('\n--- SISTEMA CYBERAUDIO v2.0.0-PRO INICIANDO ---');
+console.log('\n--- SISTEMA CYBERAUDIO v2.0.1-FIX INICIANDO ---');
 console.log(`[CONFIG] Porta: ${PORT}`);
 console.log(`[CONFIG] YouTube API Key: ${YOUTUBE_API_KEY ? 'CONFIGURADA (OK)' : 'FALTANDO (ERRO)'}`);
-
-// Configura o play-dl para usar a API Key e um User-Agent de navegador real para evitar detecção de bot
-if (YOUTUBE_API_KEY) {
-  play.setToken({
-    youtube: {
-      key: YOUTUBE_API_KEY
-    }
-  });
-}
 
 // Configuração de User Agent Global para enganar o bloqueio de 'Confirm you are not a bot'
 const CUSTOM_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
