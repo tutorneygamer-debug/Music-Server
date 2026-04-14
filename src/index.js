@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 // LOG DE INICIALIZAÇÃO PARA DEBUG NA RENDER
-console.log('\n--- SISTEMA CYBERAUDIO v2.3.0-VIDEO-FIX INICIANDO ---');
+console.log('\n--- SISTEMA CYBERAUDIO v2.3.1-VIDEO-FORCE INICIANDO ---');
 console.log(`[CONFIG] Porta: ${PORT}`);
 console.log(`[CONFIG] YouTube API Key: ${YOUTUBE_API_KEY ? 'CONFIGURADA (OK)' : 'FALTANDO (ERRO)'}`);
 
@@ -23,13 +23,13 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     engine: 'play-dl',
-    version: '2.3.0-VIDEO', 
+    version: '2.3.1-VIDEO', 
     youtube_key: !!YOUTUBE_API_KEY,
     timestamp: new Date().toISOString() 
   });
 });
 
-// ENDPOINT DE STREAMING (MODO VÍDEO ATIVADO)
+// ENDPOINT DE STREAMING (MODO VÍDEO FORÇADO)
 app.get('/api/proxy-stream/:id', async (req, res) => {
   const videoId = req.params.id;
   console.log(`\n[STREAM REQUEST] Solicitado (Vídeo): ${videoId}`);
@@ -39,11 +39,10 @@ app.get('/api/proxy-stream/:id', async (req, res) => {
   try {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     
-    console.log('[STREAM] Extraindo Vídeo + Áudio com User-Agent Real...');
-    // play.stream sem qualidade travada pega o melhor automático de vídeo/áudio
+    console.log('[STREAM] Extraindo Vídeo + Áudio...');
+    // Removido discordPlayerCompatibility para não forçar Opus/Audio-only
     const stream = await play.stream(url, {
       seek: 0,
-      discordPlayerCompatibility: true,
       userAgent: CUSTOM_USER_AGENT
     });
 
@@ -51,10 +50,10 @@ app.get('/api/proxy-stream/:id', async (req, res) => {
       throw new Error('Falha play-dl: Objeto de fluxo não gerado');
     }
 
-    console.log(`[STREAM] Sucesso: Tipo ${stream.type}. Iniciando Pipe.`);
+    console.log(`[STREAM] Sucesso: Formato detectado = ${stream.type}.`);
 
-    // ALTERADO PARA VIDEO/MP4 PARA O PLAYER DO EXPO RECONHECER
-    res.setHeader('Content-Type', 'video/mp4');
+    // Ajuste dinâmico de header baseado no tipo detectado (priorizando mp4)
+    res.setHeader('Content-Type', stream.type === 'opus' ? 'audio/mpeg' : 'video/mp4');
     res.setHeader('Transfer-Encoding', 'chunked');
     
     stream.stream.pipe(res);
