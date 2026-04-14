@@ -39,12 +39,6 @@ app.get('/api/proxy-stream/:id', async (req, res) => {
   try {
     const url = `https://www.youtube.com/watch?v=${videoId}`;
     
-    // Forçar atualização do play-dl
-    if (play.is_expired()) {
-      console.log('[STREAM] Token expirado, atualizando...');
-      await play.refreshToken();
-    }
-
     console.log('[STREAM] Iniciando extração do YouTube com User-Agent Real...');
     const stream = await play.stream(url, {
       quality: 1, 
