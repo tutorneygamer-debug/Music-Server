@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 // LOG DE INICIALIZAÇÃO PARA DEBUG NA RENDER
-console.log('\n--- SISTEMA CYBERAUDIO v2.0.1-FIX INICIANDO ---');
+console.log('\n--- SISTEMA CYBERAUDIO v2.0.2-FINAL INICIANDO ---');
 console.log(`[CONFIG] Porta: ${PORT}`);
 console.log(`[CONFIG] YouTube API Key: ${YOUTUBE_API_KEY ? 'CONFIGURADA (OK)' : 'FALTANDO (ERRO)'}`);
 
